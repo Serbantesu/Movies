@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">Favoritos</h1>
+
+<div class="card-group">
+    @foreach (Movies.Models.Pelicula pelicula in Model.Peliculas)
+    {
+        <div class="row">
+            <div class="col justify-content-center">
+                <div class="card-group pb-3 p-3" style="width:20rem">
+                    <img class="card-img-top" src="@pelicula.Portada" width="350px" height="400px" />
+
+                    <div class="card-body">
+                        <h3 class="card-text card-header text-center bg-dark mb-2 text-white">@pelicula.Nombre <a class="btn btn-outline-danger bi bi-heart-fill" fill="currentColor" href="@Url.Action("Delete","Favorite", new { media_id = pelicula.idPelicula })"></a></h3>
+                        <p class="card-text carousel-dark list-group text-center">@pelicula.Sinopsis</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

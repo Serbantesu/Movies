@@ -1,0 +1,128 @@
+﻿@model ML.Cine
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col text-lg-center">
+        <h2>Formulario Cine</h2>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="align-content-lg-center">
+        @using (Html.BeginForm("Form", "Cine", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="row">
+                <div class="col">
+                    @Html.LabelFor(model => model.IdCine, new { @class = "visually-hidden" })
+                    @Html.TextBoxFor(model => model.IdCine, new { @class = "visually-hidden"})
+                </div>
+                <p></p>
+                <div class="col">
+                    @Html.LabelFor(model => model.Nombre )
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre" })
+                </div>
+                <div class="col">
+                    @Html.LabelFor(model => model.Zona)
+                    @Html.DropDownListFor(model => model.Zona.IdZona, new SelectList(Model.Zona.Zonas, "IdZona", "Nombre"), "Selecciona una opción", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Zona.IdZona)
+                </div>
+                <div class="col">
+                    @Html.LabelFor(model => model.Ventas)
+                    @Html.TextBoxFor(model => model.Ventas, new { @class = "form-control", @id = "txtNombre"})
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    @Html.LabelFor(model => model.Latitud)
+                    @Html.TextBoxFor(model => model.Latitud, new { @class = "form-control", @id = "Latitud",@readonly=true})
+                    @Html.HiddenFor(model=> model.Latitud)
+                </div>
+                <div class="col">
+                    @Html.LabelFor(model => model.Longitud)
+                    @Html.TextBoxFor(model => model.Longitud, new { @class = "form-control", @id = "Longitud", @readonly=true})
+                    @Html.HiddenFor(model => model.Longitud)
+                </div>
+                <div class="col">
+                    @Html.LabelFor(model => model.Direccion)
+                    @Html.TextBoxFor(model => model.Direccion, new { @class = "form-control", @id = "txtDireccion" })                    
+                </div>
+            </div>
+            <p></p>
+            <div class="row">
+                <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+                <div id="map"></div>
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSKBDdPPlfca_zTwyxKiicRQn1qfgRjLw&callback=initMap&v=weekly" defer></script>
+            </div>
+            <div>
+                <div class="col-form-label-lg">
+                    <input type="submit" value="Guardar" class="openModal btn btn-success" />
+                    @Html.ActionLink("Regresar", "GetAll", "Cine", htmlAttributes: new { @class = "btn btn-danger" })
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+<style type="text/css">
+
+    #map {
+        height: 500px;
+    }
+</style>
+
+<script type="text/javascript">
+    function initMap() {
+        myLatlng = { lat: $('#Latitud'), lng: $('#Longitud') };
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 6,
+            center: { lat: 19.418780335222866, lng: -99.12610082509354 }, /*{ lat: 19.418780335222866, lng: -99.12610082509354 },*/
+        });
+        var geocoder = new google.maps.Geocoder();
+
+        // Create the initial InfoWindow.
+        let infoWindow = new google.maps.InfoWindow({
+            content: "Clickea el mapa para obtener Lat/Lng!",
+            position:  myLatlng,
+        });
+
+        infoWindow.open(map);
+        // Configure the click listener.
+        map.addListener("click", (mapsMouseEvent) => {
+            // Close the current InfoWindow.
+            infoWindow.close();
+            // Create a new InfoWindow.
+            infoWindow = new google.maps.InfoWindow({
+                position: mapsMouseEvent.latLng,
+            });
+            infoWindow.setContent(
+                JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+            );
+
+            geocoder
+                .geocode({ location: mapsMouseEvent.latLng })
+                .then((response) => {
+                    if (response.results[0]) {
+                        map.setZoom(16);
+                    }
+                    $('#txtDireccion').val(response.results[0].formatted_address);
+                });
+
+
+            infoWindow.open(map);
+            var latitud = mapsMouseEvent.latLng.lat;
+            var longitud = mapsMouseEvent.latLng.lng;
+
+            $('#Latitud').val(latitud);
+            $('#Longitud').val(longitud);
+        });
+    }
+
+    window.initMap = initMap;
+</script>

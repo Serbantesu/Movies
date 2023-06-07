@@ -1,0 +1,130 @@
+﻿@model ML.Cine
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">Ventas Cines</h1>
+
+<div class="row ">
+    <div class="col">
+        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+    </div>
+    <div class="col">
+        <div id="map" class="align-bottom"></div>
+    </div>
+
+</div>
+
+
+<style type="text/css">
+
+    #map {
+        width: 450px;
+        height: 450px;
+    }
+</style>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSKBDdPPlfca_zTwyxKiicRQn1qfgRjLw&callback=initMap&v=weekly" defer></script>
+<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.canvasjs.com/jquery.canvasjs.min.js"></script>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+<script type="text/javascript">
+    window.onload = function () {
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+            title: {
+                text: "Porcentaje de Ventas Por Zona"
+            },
+            subtitles: [{
+                text: "2023"
+            }],
+            animationEnabled: true,
+            data: [{
+                type: "pie",
+                startAngle: 40,
+                toolTipContent: "<b>{label}</b>: {y}%",
+                showInLegend: "true",
+                legendText: "{label}",
+                indexLabelFontSize: 16,
+                indexLabel: "{label} - {y}%",
+                dataPoints: [
+    @foreach (ML.Cine cine in Model.Estadistica.Total)
+    {
+        <text>{ y: @cine.Porcentaje, label: "@cine.Zona.Nombre" }, </text>
+
+    }
+                ]
+            }]
+        });
+        chart.render();
+    }
+
+
+
+
+    // This example displays a marker at the center of Australia.
+    // When the user clicks the marker, an info window opens.
+    function initMap() {        
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 11,
+            center: { lat: 19.418780335222866, lng: -99.12610082509354 }, /*{ lat: 19.418780335222866, lng: -99.12610082509354 },*/
+        });
+        var geocoder = new google.maps.Geocoder();
+
+    @foreach (ML.Cine cine in Model.Cines)
+    {
+        <text>
+                var contentString =
+                '<div id="content">' +
+                '<div id="siteNotice">' +
+                "</div>" +
+                '<h4 id="firstHeading" class="firstHeading">@cine.Nombre</h4>' +
+                '<div id="bodyContent">' +
+                "<p><b>Direccion:</b> @cine.Direccion</p>" +
+                "<p><b>Zona:</b> @cine.Zona.Nombre</p>" +
+                "<p><b>Ventas:</b> @cine.Ventas</p>"
+                "</div>" +
+                "</div>";
+
+            var infowindow_@cine.IdCine = new google.maps.InfoWindow({
+                content: contentString,
+                ariaLabel: "Uluru",
+            });
+
+            var marker_@cine.IdCine = new google.maps.Marker({
+                position: {lat: @cine.Latitud, lng: @cine.Longitud}, map,
+                title: '@cine.Nombre',
+            });
+
+            (marker_@cine.IdCine).addListener("click", function () {
+                (infowindow_@cine.IdCine).open(map, marker_@cine.IdCine);
+        });
+        </text>
+    }
+                                    }
+
+    window.initMap = initMap;
+</script>
+
+
+
+@*
+for (var i = 0; i <= ; i++) {
+                geocoder
+                    .geocode({ address: @Model.Direccion})
+                    .then((response) => {
+                        const position = response.results[0].geometry.location;
+
+                        map.setCenter(position);
+                        new google.maps.Marker({
+                            map,
+                            position,
+                        });
+                    })
+                    .catch((e) =>
+                        window.alert("Geocode was not successful for the following reason: " + e)
+                    );
+            }*@

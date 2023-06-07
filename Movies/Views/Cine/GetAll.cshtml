@@ -1,0 +1,60 @@
+﻿@model ML.Cine
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <section>
+        <h2 class="text-center">Modulo de Cines</h2>
+        <p>
+            En este modulo puedes visualizar los Cines existentes así como agregar, modificar y eliminar<br />
+        </p>
+    </section>
+    <section>
+        <div style="float:right">
+            @Html.ActionLink(" Agregar", "Form", "Cine", htmlAttributes: new { @class = "btn btn-success bi bi-person-add" })
+        </div>
+    </section>
+    <hr />
+
+    <p>
+
+    </p>
+    <section>
+        <table class="table table-success table-striped table-bordered table-responsive-lg">
+            <thead class="table-dark">
+                <tr>
+                    <td class="text-center" style="font-weight:bold;">Editar</td>
+
+                    <td class="visually-hidden">IdAseguradora</td>
+                    <td class="text-center" style="font-weight:bold;">Nombre</td>
+                    <td class="text-center" style="font-weight:bold;">Direccion</td>                    
+                    <td class="visually-hidden">IdZona</td>
+                    <td class="text-center" style="font-weight:bold;">Zona</td>
+                    <td class="text-center" style="font-weight:bold;">Ventas</td>
+
+                    <td class="text-center" style="font-weight:bold;">Eliminar</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ML.Cine cine in Model.Cines)
+                {
+                    <tr>
+                        <td class="text-center"><a class="btn btn-warning bi bi-pencil-square" href="@Url.Action("Form","Cine", new { IdCine = cine.IdCine })"></a></td>
+                        <td class="visually-hidden">@cine.IdCine</td>
+                        <td>@cine.Nombre</td>
+                        <td>@cine.Direccion</td>
+                        <td class="visually-hidden">@cine.Zona.IdZona</td>
+                        <td>@cine.Zona.Nombre</td>
+                        <td>@cine.Ventas</td>
+                        
+                        <td class="text-center"><a class="btn btn-danger bi bi-trash3" href="@Url.Action("Delete","Cine", new { IdCine = cine.IdCine })" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+
+
+</div>
