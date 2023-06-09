@@ -21,7 +21,6 @@ public partial class Cine
 
     public virtual Zona? IdZonaNavigation { get; set; }
 
-    //Propiedades Agregadas
-
+    //Propiedades Agregadas 
     public string NombreZona { get; set; }
 }

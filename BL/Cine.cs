@@ -171,17 +171,16 @@ namespace BL
             {
                 cine.Total = cine.Total + total.Ventas;
             }
-            res.Objects = new List<object>();            
+            res.Objects = new List<object>();
             foreach (ML.Cine porcentaje in cine.Estadistica.Total)
-            {                
-                if (porcentaje.Zona.IdZona == 1 || porcentaje.Zona.IdZona == 2 || porcentaje.Zona.IdZona == 3 || porcentaje.Zona.IdZona == 4 || porcentaje.Zona.IdZona == 5)
-                {                             
+            {
+                if (porcentaje.Zona.IdZona == 1)
+                {
                     porcentaje.Porcentaje = (porcentaje.Ventas / cine.Total) * 100;
-                    cine.PorcentajeZona = cine.PorcentajeZona + porcentaje.Porcentaje;                                       
-                }                
+                    result.TotalVenta = porcentaje.Porcentaje;
+                    }                
                 res.Objects.Add(porcentaje);
             }
-
             return result;
         }
     }
