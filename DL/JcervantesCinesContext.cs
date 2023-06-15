@@ -23,7 +23,7 @@ public partial class JcervantesCinesContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=.; Database= JCervantesCines; Trusted_Connection= True; TrustServerCertificate=True; User ID=sa; Password=pass@word1;");
+        => optionsBuilder.UseSqlServer("Server=.; Database = JCervantesCines; Trusted_Connection=True; TrustServerCertificate=True; User ID=sa; Password=pass@word1;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -47,28 +47,29 @@ public partial class JcervantesCinesContext : DbContext
 
         modelBuilder.Entity<Usuario>(entity =>
         {
-            entity.HasKey(e => e.IdUsuario).HasName("PK__Usuario__5B65BF97421F1AEE");
+            entity.HasKey(e => e.IdUsuario).HasName("PK__Usuario__5B65BF97097174B5");
 
             entity.ToTable("Usuario");
 
-            entity.HasIndex(e => e.UserName, "UQ__Usuario__C9F2845666D20280").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Usuario__A9D1053438FB3587").IsUnique();
+
+            entity.HasIndex(e => e.UserName, "UQ__Usuario__C9F284566557B589").IsUnique();
 
             entity.Property(e => e.ApellidoMaterno)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("ApellidoMAterno");
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.ApellidoPaterno)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Email)
                 .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.Nombre)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Password).HasMaxLength(20);
             entity.Property(e => e.UserName)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .IsUnicode(false);
         });
 
