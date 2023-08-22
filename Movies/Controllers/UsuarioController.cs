@@ -46,8 +46,12 @@ namespace Movies.Controllers
                 {
                     return RedirectToAction("GetAll", "Popular");
                 }
+                else
+                {
+                    ViewBag.Mesage = "El Correo o contraseña son incorrectos";
+                    return View("Modal");
+                }
             }
-            return View();
         }
 
         [HttpGet]
@@ -72,7 +76,10 @@ namespace Movies.Controllers
             {
                 MailMessage mailMessage = new MailMessage(usuario.Email, email, "Recuperar Contraseña","<p>Correo para recuperar la Contarseña</p>");
                 mailMessage.IsBodyHtml = true;
-                string contenidoHTML = System.IO.File.ReadAllText(template);
+                //string contenidoHTML = System.IO.File.ReadAllText(template);
+
+                string contenidoHTML = System.IO.File.ReadAllText(Path.Combine(_hostingEnvironment.ContentRootPath, "wwwroot", "Templates", "Email.html"));
+
                 mailMessage.Body = contenidoHTML;
 
                 string url = urlLogin + HttpUtility.UrlEncode(email);

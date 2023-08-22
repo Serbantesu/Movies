@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\Style.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Views\Usuario\Email.html" />
   </ItemGroup>
 
